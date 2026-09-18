@@ -5,6 +5,7 @@ import static az.shopery.filenet_ms.util.constants.ExceptionConstants.SOME_FILES
 
 import az.shopery.filenet_ms.handler.exception.FileNotFoundException;
 import az.shopery.filenet_ms.model.dto.request.DeleteFilesRequestDto;
+import az.shopery.filenet_ms.model.dto.request.SaveFileRequestDto;
 import az.shopery.filenet_ms.model.dto.shared.SuccessResponse;
 import az.shopery.filenet_ms.model.entity.File;
 import az.shopery.filenet_ms.repository.FileRepository;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -46,5 +48,16 @@ public class FileServiceImpl implements FileService {
 
         fileRepository.deleteAllById(fileIds);
         return SuccessResponse.of("Files deleted successfully!");
+    }
+
+    @Override
+    public SuccessResponse<Void> saveFile(MultipartFile multipartFile) {
+        File file = File.builder()
+                .content()
+                .contentType()
+                .build();
+
+
+        return SuccessResponse.of("File saved successfully!");
     }
 }
