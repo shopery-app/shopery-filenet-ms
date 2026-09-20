@@ -1,7 +1,7 @@
 package az.shopery.filenet_ms.controller;
 
 import az.shopery.filenet_ms.model.dto.request.DeleteFilesRequestDto;
-import az.shopery.filenet_ms.model.dto.request.SaveFileRequestDto;
+import az.shopery.filenet_ms.model.dto.response.SaveFileResponseDto;
 import az.shopery.filenet_ms.model.dto.shared.SuccessResponse;
 import az.shopery.filenet_ms.service.FileService;
 import jakarta.validation.Valid;
@@ -30,8 +30,7 @@ public class FileController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<SuccessResponse<Void>> saveFile(@RequestPart("file") MultipartFile multipartFile) {
+    public ResponseEntity<SuccessResponse<SaveFileResponseDto>> saveFile(@RequestPart("file") MultipartFile multipartFile) {
         return ResponseEntity.ok(fileService.saveFile(multipartFile));
     }
-
 }

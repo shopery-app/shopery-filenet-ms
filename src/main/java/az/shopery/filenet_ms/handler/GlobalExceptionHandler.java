@@ -1,6 +1,7 @@
 package az.shopery.filenet_ms.handler;
 
 import az.shopery.filenet_ms.handler.exception.FileNotFoundException;
+import az.shopery.filenet_ms.handler.exception.FileSavingException;
 import az.shopery.filenet_ms.model.dto.shared.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -21,6 +22,12 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(exception, HttpStatus.NOT_FOUND, httpServletRequest);
     }
 
+    @ExceptionHandler(FileSavingException.class)
+    public ResponseEntity<ErrorResponse> handleFileSavingException(Exception exception, HttpServletRequest httpServletRequest) {
+        log.error("error while saving the file: {}", exception.getMessage());
+        return buildErrorResponse(exception, HttpStatus.INTERNAL_SERVER_ERROR, httpServletRequest);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception exception, HttpServletRequest httpServletRequest) {
         log.error("unexpected error occurred: {}", exception.getMessage());
@@ -33,13 +40,9 @@ public class GlobalExceptionHandler {
                 .statusCode(httpStatus.value())
                 .timestamp(LocalDateTime.now())
                 .message(HtmlUtils.htmlEscape(exception.getMessage()))
-                .path(sanitizePath(httpServletRequest.getRequestURI()))
+                .path(HtmlUtils.htmlEscape(httpServletRequest.getRequestURI()))
                 .build();
 
         return new ResponseEntity<>(errorResponse, httpStatus);
-    }
-
-    private String sanitizePath(String path) {
-        return HtmlUtils.htmlEscape(path);
     }
 }
