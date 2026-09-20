@@ -7,6 +7,7 @@ import static az.shopery.filenet_ms.util.constants.ExceptionConstants.SOME_FILES
 import az.shopery.filenet_ms.handler.exception.FileNotFoundException;
 import az.shopery.filenet_ms.handler.exception.FileSavingException;
 import az.shopery.filenet_ms.model.dto.request.DeleteFilesRequestDto;
+import az.shopery.filenet_ms.model.dto.response.GetFileResponseDto;
 import az.shopery.filenet_ms.model.dto.response.SaveFileResponseDto;
 import az.shopery.filenet_ms.model.dto.shared.SuccessResponse;
 import az.shopery.filenet_ms.model.entity.File;
@@ -78,5 +79,18 @@ public class FileServiceImpl implements FileService {
             log.error("error while reading file: ", exception);
             throw new FileSavingException(FILE_SAVING_ERROR);
         }
+    }
+
+    @Override
+    public SuccessResponse<GetFileResponseDto> getFile(UUID id) {
+        log.info("getting file: {}", id);
+        File file = fileRepository.findById(id)
+                .orElseThrow(() -> new FileNotFoundException(FILE_NOT_FOUND));
+
+        GetFileResponseDto getFileResponseDto = GetFileResponseDto.builder()
+                .content(file.getContent())
+                .build();
+
+        return SuccessResponse.of(getFileResponseDto, "File retrieved successfully!");
     }
 }
