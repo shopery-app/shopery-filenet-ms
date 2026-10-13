@@ -12,9 +12,3 @@ spring:
     properties:
       hibernate:
         format_sql: false
-
-springdoc:
-  swagger-ui:
-    enabled: false
-  api-docs:
-    enabled: false
